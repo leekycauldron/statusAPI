@@ -1,1 +1,4 @@
 /py_env
+config.py
+/__pycache__
+/middleware/__pycache__
