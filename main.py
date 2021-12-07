@@ -13,7 +13,7 @@ from utils import deny, getTMPCurrentWeather
 
 app = Flask(__name__)
 
-debug = True
+debug = False
 PORT = 80
 
 # @route: /
