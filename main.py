@@ -10,9 +10,9 @@ from auth import Authenticate
 from getTasks import getTasks
 from currentWeatherThread import currentWeatherThread
 from utils import deny, getTMPCurrentWeather
-
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 debug = True
 PORT = 80
 
