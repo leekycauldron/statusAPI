@@ -1,8 +1,11 @@
 import json, sys
 from os import stat
 from flask import Flask, jsonify, request
+from requests.api import get
 sys.path.insert(0,"./middleware")
+sys.path.insert(1,"./TodoistApps")
 from auth import Authenticate
+from getTasks import getTasks
 app = Flask(__name__)
 
 debug = True
@@ -19,12 +22,14 @@ def index():
     return message,status
 
 
-# @route: /
+# @route: /todoist/tasks
 # @access: Private
-# @description: This route returns weather data to the authenticated user. The (1) user will be rate limited to 2 requests per hour.
-@app.route("/weather")
-def weather():
-    
+# @description: This route returns all the todoist tasks in project "Tasks". Limit to 2 total request per 2 seconds.
+# TODO: Rate limit to 1 request per 2 seconds.
+@app.route("/todoist/tasks")
+def todoistTasks():
+    tasks = getTasks()
+    return jsonify(tasks)
 
 if __name__ == "__main__":
     if debug:

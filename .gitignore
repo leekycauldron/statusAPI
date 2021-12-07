@@ -2,3 +2,4 @@
 config.py
 /__pycache__
 /middleware/__pycache__
+/TodoistApps/__pycache__
