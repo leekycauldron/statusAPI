@@ -13,7 +13,7 @@ from utils import deny, getTMPCurrentWeather
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
-debug = True
+debug = False
 PORT = 80
 
 # @route: /
