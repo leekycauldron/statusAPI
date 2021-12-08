@@ -1,4 +1,4 @@
-import json, sys, threading
+import json, sys, threading, argparse
 from os import stat
 from flask import Flask, jsonify, request
 from requests.api import get
@@ -13,7 +13,7 @@ from utils import deny, getTMPCurrentWeather
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
-debug = False
+
 PORT = 80
 
 # @route: /
@@ -56,7 +56,14 @@ if __name__ == "__main__":
     thread1 = threading.Thread(target=currentWeatherThread)
     thread1.daemon = True
     thread1.start()
-    if debug:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-m", "--mode", type=str, required=True,
+        help="mode to run server (localhost/network). Options (0 or 1) respectively.")
+
+    args = vars(ap.parse_args())
+    mode = args["mode"]
+
+    if mode == "0":
         app.run(port=PORT)
-    else:
+    elif mode == "1":
         app.run(host="0.0.0.0",port=PORT)
