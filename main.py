@@ -8,6 +8,7 @@ sys.path.insert(1,"./TodoistApps")
 sys.path.insert(2,"./Threads")
 from auth import Authenticate
 from getTasks import getTasks
+from finishTask import finishTask
 from currentWeatherThread import currentWeatherThread
 from utils import deny, getTMPCurrentWeather
 from flask_cors import CORS
@@ -37,6 +38,23 @@ def todoistTasks():
         return deny()
     tasks = getTasks()
     return jsonify(tasks)
+
+# @route: /todoist/closeTask
+# @access: Private
+# @description: This route deletes todoist task given its ID.
+@app.route("/todoist/closeTask", methods=["DELETE"])
+def closeTask():
+    if not Authenticate("567g8uibvcrVA76L7g8bE7cv8b9Rbv7I5f23h234ojEkj0j09j76866hm9"):
+        return deny()
+    taskToFinish = json.loads(request.data)
+    
+    successDelete = finishTask(taskToFinish["id"])
+    if not successDelete:
+        return jsonify({"error":"There was an error removing the task, please try again."}), 500
+    return jsonify({"message":"Task successfully removed."})
+  
+    
+
 
 # @route: /weather/now
 # @access: Private
