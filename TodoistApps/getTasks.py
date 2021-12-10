@@ -20,6 +20,7 @@ def getTasks():
         temp["Description"] = tasks["description"]
         temp["Priority"] = tasks["priority"]
         temp["Due Date"] = tasks["due"]["date"]
+        temp["ID"] = tasks["id"]
   
         tasksPretty.append(temp)
     return tasksPretty
