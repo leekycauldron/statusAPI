@@ -1,6 +1,5 @@
 from flask import jsonify
 import os, json
-
 #Denies user from access
 def deny():
     return jsonify({"Error": "Forbidden"}),403

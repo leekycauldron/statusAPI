@@ -3,3 +3,8 @@ config.py
 /__pycache__
 /middleware/__pycache__
 /TodoistApps/__pycache__
+/.vscode
+/Threads/__pycache__
+/UberEatsApps/__pycache__
+/WeatherApps/__pycache__
+WeatherApps/tmp/currentWeather.json

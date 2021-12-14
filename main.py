@@ -6,16 +6,25 @@ from Threads.currentWeatherThread import currentWeatherThread
 sys.path.insert(0,"./middleware")
 sys.path.insert(1,"./TodoistApps")
 sys.path.insert(2,"./Threads")
+sys.path.insert(3,"./UberEatsApps")
 from auth import Authenticate
 from getTasks import getTasks
 from finishTask import finishTask
 from currentWeatherThread import currentWeatherThread
+from fetchLinks import fetchLinks
+from notificationListenerThread import notificationListenerThread
 from utils import deny, getTMPCurrentWeather
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
 PORT = 80
+
+# A variable used to tell the Uber Eats thread if they need to check the links.
+# False by default.
+
+uberEats = False
+
 
 # @route: /
 # @access: Public
@@ -66,7 +75,35 @@ def weatherNow():
     if not Authenticate("567g8uibvcrVA76L7g8bE7cv8b9Rbv7I5f23h234ojEkj0j09j76866hm9"):
         return deny()
     return jsonify(getTMPCurrentWeather())
- 
+
+
+# @route: /ubereats
+# @access: Private
+# @description: This route fetches all current uber eats deliveries and provides the user with the link. 
+
+@app.route("/ubereats")
+def uberEats():
+    global uberEats
+    if not Authenticate("567g8uibvcrVA76L7g8bE7cv8b9Rbv7I5f23h234ojEkj0j09j76866hm9"):
+        return deny()
+
+    #Get links
+    links = fetchLinks()
+    print(links)
+    if not links:
+        return jsonify({"message":"There are no links at this time."})
+    #get thread to run
+    uberEats = True
+
+    #return link
+
+    return jsonify({"Links: ": links})
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
@@ -74,6 +111,10 @@ if __name__ == "__main__":
     thread1 = threading.Thread(target=currentWeatherThread)
     thread1.daemon = True
     thread1.start()
+    #Listens for phone notifications and does stuff with it.
+    thread2 = threading.Thread(target=notificationListenerThread)
+    thread2.daemon = True
+    thread2.start()
     ap = argparse.ArgumentParser()
     ap.add_argument("-m", "--mode", type=str, required=True,
         help="mode to run server (localhost/network). Options (0 or 1) respectively.")
